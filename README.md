@@ -7,7 +7,7 @@ xUnit integration tests in `backend.Tests`.
 - **To run natively:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and [Node.js 22+](https://nodejs.org/)
 - **To run via Docker:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## Run without Docker (local development)
+## 1) Run without Docker (local development)
 
 Two terminals:
 
@@ -22,7 +22,7 @@ npm install
 npm run dev           # -> http://localhost:5173
 ```
 
-## Run with Docker
+## 2) Run with Docker
 
 ```powershell
 cd DeliveryApp
