@@ -2,9 +2,12 @@
 
 using backend.Data;
 using backend.Models;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -12,8 +15,20 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 //DB Registration
-builder.Services.AddDbContext<AppDbContext>(options => 
-options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+var inMemoryDatabaseName = builder.Configuration["UseInMemoryDatabase"];
+if (!string.IsNullOrEmpty(inMemoryDatabaseName))
+{
+	builder.Services.AddDbContext<AppDbContext>(options => 
+		options.UseInMemoryDatabase(inMemoryDatabaseName));
+}
+else
+{
+	builder.Services.AddDbContext<AppDbContext>(options => 
+		options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+}
+
+//OrderNumberGenerator registration
+builder.Services.AddScoped<OrderNumberGenerator>();
 
 //CORS for React
 builder.Services.AddCors(options =>
@@ -35,32 +50,9 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope()) 
 {
 	var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-	db.Database.Migrate();
-
-	if (!db.Orders.Any())
+	if (db.Database.IsSqlite()) 
 	{
-		db.Orders.AddRange(
-			new Order
-			{
-				OrderNumber = "ORDED-20260916-0001",
-				SenderCity = "Москва",
-				SenderAddress = "ул. Ленина, 1",
-				RecipientCity = "СПб",
-				RecipientAddress = "Невский пр., 10",
-				CargoWeight = 15.5m,
-				PickupDate = DateTime.Today.AddDays(1)
-			},
-			new Order
-			{
-				OrderNumber = "ORDER-20260916-0002",
-				SenderCity = "Казань",
-				SenderAddress = "ул. Баумана, 5",
-				RecipientCity = "Москва",
-				RecipientAddress = "ул. Тверская, 20",
-				CargoWeight = 7.2m,
-				PickupDate = DateTime.Today.AddDays(2)
-			});
-		db.SaveChanges();
+		db.Database.Migrate();
 	}
 }
 
@@ -73,10 +65,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Frontend");
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment()) 
+{
+	app.UseHttpsRedirection();
+}
+
 
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+
+}

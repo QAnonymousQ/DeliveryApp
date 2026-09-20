@@ -7,6 +7,7 @@ import CreateOrderPage from './pages/CreateOrderPage.jsx'
 import OrderListPage from './pages/OrderListPage.jsx'
 import OrderDetailPage from './pages/OrderDetailPage.jsx'
 
+//Routing configuration
 const router = createBrowserRouter([
   {
     path: '/',

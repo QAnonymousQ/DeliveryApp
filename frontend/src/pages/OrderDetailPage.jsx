@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getOrder } from '../api/ordersApi'
 
+//Formating date function
 function formatDate(value) {
   if (!value) return '—'
   const d = new Date(value)
@@ -11,10 +12,12 @@ function formatDate(value) {
   return `${day}.${month}.${d.getFullYear()}`
 }
 
+//Formating weight function
 function formatWeight(value) {
   return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(value))
 }
 
+//Many-time used component for displaying
 function Field({ label, children }) {
   return (
     <div className="detail-field">
@@ -25,13 +28,17 @@ function Field({ label, children }) {
 }
 
 function OrderDetailPage() {
+
   const { id } = useParams()
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  //Data loading
   useEffect(() => {
+    //
     let cancelled = false
+    //API call
     getOrder(id)
       .then((data) => {
         if (!cancelled) setOrder(data)
@@ -65,7 +72,6 @@ function OrderDetailPage() {
       <div className="card__header">
         <div>
           <h1 className="card__title">Заказ {order.orderNumber}</h1>
-          <p className="card__subtitle">Режим просмотра (только чтение)</p>
         </div>
       </div>
 

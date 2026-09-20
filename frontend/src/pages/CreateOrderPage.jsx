@@ -94,7 +94,6 @@ function CreateOrderPage() {
   return (
     <div className="card">
       <h1 className="card__title">Новый заказ</h1>
-      <p className="card__subtitle">Все поля обязательны для заполнения</p>
 
       {serverError && <div className="alert alert--error">{serverError}</div>}
 
@@ -190,6 +189,7 @@ function CreateOrderPage() {
             Отмена
           </Link>
         </div>
+        <p className="card__subtitle">*Все поля обязательны для заполнения</p>
       </form>
     </div>
   )

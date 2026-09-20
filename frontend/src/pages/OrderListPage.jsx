@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getOrders } from '../api/ordersApi'
 
+//Formating number function
 function formatNumber(value) {
   return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(value))
 }
 
+//Formating date function
 function formatDate(value) {
   if (!value) return '—'
   const d = new Date(value)
@@ -15,6 +17,7 @@ function formatDate(value) {
   return `${day}.${month}.${d.getFullYear()}`
 }
 
+//Formating DateTime function
 function formatDateTime(value) {
   if (!value) return '—'
   const d = new Date(value)
@@ -29,6 +32,7 @@ function OrderListPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  //Data loading
   useEffect(() => {
     let cancelled = false
     getOrders()
@@ -70,8 +74,6 @@ function OrderListPage() {
 
       {orders.length === 0 ? (
         <p className="card__empty">
-          Заказов нет.{' '}
-          <Link to="/create">Создайте первый заказ</Link>
         </p>
       ) : (
         <div className="table-wrap">

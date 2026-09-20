@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace backend.Controllers
 	public class OrdersController: ControllerBase
 	{
 		private readonly AppDbContext _db;
+		private readonly OrderNumberGenerator _numberGenerator;
 
-		public OrdersController(AppDbContext db)
+		public OrdersController(AppDbContext db, OrderNumberGenerator numberGenerator)
 		{
 			_db = db;
+			_numberGenerator = numberGenerator;
 		}
 		[HttpGet]
 		public async Task<ActionResult<List<Order>>> Get() 
@@ -28,6 +31,16 @@ namespace backend.Controllers
 			var order = await _db.Orders.AsNoTracking().FirstOrDefaultAsync(o=>o.Id==id);
 			return order is null ? NotFound() : Ok(order); 
 		}
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id) 
+		{
+			var order = await _db.Orders.FirstOrDefaultAsync(o=>o.Id==id);
+			if (order is null) return NotFound();
+			
+			_db.Orders.Remove(order);
+			await _db.SaveChangesAsync();
+			return NoContent();
+		}
 
 		[HttpPost]
 		public async Task<ActionResult<Order>> Create(OrderRequest request) 
@@ -39,7 +52,7 @@ namespace backend.Controllers
 
 			var order = new Order
 			{
-				OrderNumber = GenerateOrderNumber(),
+				OrderNumber = _numberGenerator.GenerateOrderNumber(),
 				SenderCity = request.SenderCity,
 				SenderAddress = request.SenderAddress,
 				RecipientCity = request.RecipientCity,
@@ -53,9 +66,11 @@ namespace backend.Controllers
 
 			return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
 		}
+		/*
 		private string GenerateOrderNumber() 
 		{
-			return $"ORDER-{DateTime.Today:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+			return $"{DateTime.Today:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 		}
+		*/
 	}
 }
