@@ -24,13 +24,14 @@ Two terminals:
 ```powershell
 # 1) Backend API
 cd backend
-dotnet run            # -> http://localhost:5139
+dotnet run           
 
 # 2) Frontend Vite dev server
 cd frontend
 npm install
-npm run dev           # -> http://localhost:5173
+npm run dev           
 ```
+- App: http://localhost:5173
 
 ## Data & persistence
 
