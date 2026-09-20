@@ -7,7 +7,17 @@ xUnit integration tests in `backend.Tests`.
 - **To run natively:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and [Node.js 22+](https://nodejs.org/)
 - **To run via Docker:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## 1) Run without Docker
+## 1) Run with Docker (Recomended)
+
+```powershell
+cd DeliveryApp
+docker compose up --build
+```
+
+- App: http://localhost:8080
+- SQLite data persists in the `deliveryapp_delivery-sqlite` volume
+
+## 2) Run without Docker
 
 Two terminals:
 
@@ -21,16 +31,6 @@ cd frontend
 npm install
 npm run dev           # -> http://localhost:5173
 ```
-
-## 2) Run with Docker
-
-```powershell
-cd DeliveryApp
-docker compose up --build
-```
-
-- App: http://localhost:8080
-- SQLite data persists in the `deliveryapp_delivery-sqlite` volume
 
 ## Data & persistence
 
