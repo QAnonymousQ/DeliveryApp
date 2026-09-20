@@ -7,7 +7,7 @@ xUnit integration tests in `backend.Tests`.
 - **To run natively:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and [Node.js 22+](https://nodejs.org/)
 - **To run via Docker:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## 1) Run without Docker (local development)
+## 1) Run without Docker
 
 Two terminals:
 
